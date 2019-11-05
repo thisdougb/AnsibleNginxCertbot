@@ -61,4 +61,4 @@ MIT / BSD
 Author Information
 ------------------
 
-@thisdougb
+[@thisdougb](https://twitter.com/thisdougb "Twitter")
