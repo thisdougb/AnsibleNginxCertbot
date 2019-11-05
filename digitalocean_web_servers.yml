@@ -6,7 +6,8 @@
             digitalocean_firewall_name: fw-web-servers,
             digitalocean_firewall_rule: ssh-inbound,
             digitalocean_firewall_rule_status: enable
-        }
+        },
+        tags: [ ssh_on ]
       }
 
     - { role: digitalocean_firewall,
@@ -14,5 +15,6 @@
             digitalocean_firewall_name: fw-web-servers,
             digitalocean_firewall_rule: ssh-inbound,
             digitalocean_firewall_rule_status: disable
-        }
+        },
+        tags: [ ssh_off ]
       }
