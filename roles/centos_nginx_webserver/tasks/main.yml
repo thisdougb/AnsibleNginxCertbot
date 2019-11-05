@@ -35,3 +35,9 @@
       group: nginx
       mode: 0644
       force: no
+
+- name: Start service nginx, if not started
+  service:
+    name: nginx
+    state: started
+    enabled: yes
