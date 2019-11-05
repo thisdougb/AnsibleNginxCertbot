@@ -1,0 +1,37 @@
+---
+# tasks file for roles/centos_nginx_webserver
+
+- name: ensure Nginx installed with latest
+  yum:
+      name: nginx
+      state: latest
+
+- name: set webroot directory path
+  set_fact:
+      centos_nginx_webserver_webroot_path: "{{ centos_nginx_webserver_root }}{{ centos_nginx_webserver_name }}/html"
+
+- name: create Nginx web root directory on the filesystem
+  file:
+      path: "{{ centos_nginx_webserver_webroot_path }}"
+      state: directory
+      owner: root
+      group: nginx
+      mode: 0755
+
+- name: deploy Nginx config
+  template:
+      src: nginx.conf.j2
+      dest: /etc/nginx/nginx.conf
+      owner: root
+      group: root
+      mode: 0644
+      force: yes
+
+- name: deploy website holding page
+  copy:
+      src: holding_page.html
+      dest: "{{ centos_nginx_webserver_webroot_path}}/index.html"
+      owner: root
+      group: nginx
+      mode: 0644
+      force: yes

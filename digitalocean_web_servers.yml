@@ -10,6 +10,8 @@
         tags: [ ssh_on ]
       }
 
+    - { role: centos_nginx_webserver, tags: nginx }
+
     - { role: digitalocean_firewall,
         vars: {
             digitalocean_firewall_name: fw-web-servers,

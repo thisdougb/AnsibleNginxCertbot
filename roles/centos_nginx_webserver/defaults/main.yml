@@ -1,0 +1,5 @@
+---
+# defaults file for roles/centos_nginx_webserver
+
+centos_nginx_webserver_name: mywebsite.com
+centos_nginx_webserver_root: "/var/www/"
