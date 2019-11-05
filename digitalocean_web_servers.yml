@@ -11,6 +11,7 @@
       }
 
     - { role: centos_nginx_webserver, tags: nginx }
+    - { role: centos_nginx_certbot_easydns, tags: certbot }
 
     - { role: digitalocean_firewall,
         vars: {
