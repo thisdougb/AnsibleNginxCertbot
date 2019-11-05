@@ -34,4 +34,4 @@
       owner: root
       group: nginx
       mode: 0644
-      force: yes
+      force: no
