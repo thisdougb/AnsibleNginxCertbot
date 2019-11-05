@@ -1,0 +1,48 @@
+---
+# tasks file for roles/digitalocean_firewall
+
+- name: Check digitalocean_api_token is defined
+  fail:
+      msg: digitalocean_api_token is not defined
+  when: digitalocean_api_token is not defined
+
+- name: Get list of firewalls from DigitalOcean API
+  uri:
+    url: https://api.digitalocean.com/v2/firewalls
+    method: GET
+    return_content: yes
+    headers:
+        Authorization: "Bearer {{ digitalocean_api_token }}"
+        Content-Type: "application/json"
+  delegate_to: localhost
+  register: response
+
+- name: Set DigitalOcean firewall ID
+  set_fact:
+    digitalocean_firewall_id: "{{ response | json_query(query) | first }}"
+  vars:
+      query: "json.firewalls[?name=='{{ digitalocean_firewall_name }}'].id"
+
+- name: "Call DigitalOcean API to add {{ digitalocean_firewall_rule }} to {{ digitalocean_firewall_name }}"
+  uri:
+    url: "https://api.digitalocean.com/v2/firewalls/{{ digitalocean_firewall_id }}/rules"
+    method: POST
+    src: "{{ digitalocean_firewall_rule }}-rule.json"
+    headers:
+        Authorization: "Bearer {{ digitalocean_api_token }}"
+        Content-Type: "application/json"
+    status_code: 204
+  delegate_to: localhost
+  when: digitalocean_firewall_rule_status == "enable"
+
+- name: "Call DigitalOcean API to delete {{ digitalocean_firewall_rule }} from {{ digitalocean_firewall_name }}"
+  uri:
+    url: "https://api.digitalocean.com/v2/firewalls/{{ digitalocean_firewall_id }}/rules"
+    method: DELETE
+    src: "{{ digitalocean_firewall_rule }}-rule.json"
+    headers:
+        Authorization: "Bearer {{ digitalocean_api_token }}"
+        Content-Type: "application/json"
+    status_code: 204
+  delegate_to: localhost
+  when: digitalocean_firewall_rule_status != "enable"

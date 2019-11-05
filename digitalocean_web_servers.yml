@@ -1,0 +1,18 @@
+- hosts: web_servers
+
+  roles:
+    - { role: digitalocean_firewall,
+        vars: {
+            digitalocean_firewall_name: fw-web-servers,
+            digitalocean_firewall_rule: ssh-inbound,
+            digitalocean_firewall_rule_status: enable
+        }
+      }
+
+    - { role: digitalocean_firewall,
+        vars: {
+            digitalocean_firewall_name: fw-web-servers,
+            digitalocean_firewall_rule: ssh-inbound,
+            digitalocean_firewall_rule_status: disable
+        }
+      }
