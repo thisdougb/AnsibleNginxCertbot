@@ -15,6 +15,7 @@
         Authorization: "Bearer {{ digitalocean_api_token }}"
         Content-Type: "application/json"
   delegate_to: localhost
+  no_log: true
   register: response
 
 - name: Set DigitalOcean firewall ID
@@ -33,6 +34,7 @@
         Content-Type: "application/json"
     status_code: 204
   delegate_to: localhost
+  no_log: true
   when: digitalocean_firewall_rule_status == "enable"
 
 - name: "Call DigitalOcean API to delete {{ digitalocean_firewall_rule }} from {{ digitalocean_firewall_name }}"
@@ -45,4 +47,5 @@
         Content-Type: "application/json"
     status_code: 204
   delegate_to: localhost
+  no_log: true
   when: digitalocean_firewall_rule_status != "enable"
