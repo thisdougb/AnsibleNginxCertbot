@@ -44,6 +44,7 @@ Once Certbot has done its thing, we go back to EasyDNS and delete the validation
       }
 ```
 Finally, once we're done working on the instance we switch off SSH access via the DigitalOcean API.
+Turning on SSH access only during playbook execution is strangely something the security-wonks haven't woken up to yet.
 
 This is orchestration, we're pulling together actions from two different vendor APIs and on-instance changes to get to our desired state.
 Small and re-usable components, the simpler things are the more powerful they turn out to be.
