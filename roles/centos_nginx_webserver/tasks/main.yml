@@ -1,6 +1,11 @@
 ---
 # tasks file for roles/centos_nginx_webserver
 
+- name: install epel repo
+  yum:
+      name: epel-release
+      state: latest
+
 - name: ensure Nginx installed with latest
   yum:
       name: nginx
