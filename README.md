@@ -52,6 +52,9 @@ Once the certs are in place on the filesystem, we go ahead a install/config Ngin
 Finally, once we're done working on the instance we switch off SSH access via the DigitalOcean API.
 You can save a lot of false-alerting by preventing SSH brute-force attempts in this way.
 
+This is orchestration, we're pulling together actions from different vendor APIs plus on-instance changes to get to our desired state.
+Small and re-usable components, the simpler things are the more powerful they turn out to be.
+
 The neat thing with all of this, is that when we want to renew our web certs we already have the code!
 Just re-run this on a schedule and it'll re-run Certbot with my EasyDNS API credentials (which are never stored on the instance).
 Code once, re-use often.
@@ -61,5 +64,5 @@ Not only is it re-usable and simple, it's also very easy to extend with addition
 For example, you may want to automate some sort of data load process.
 So open up access just for that process to complete, then close it off again to avoid mistakes.
 
-This is orchestration, we're pulling together actions from two different vendor APIs and on-instance changes to get to our desired state.
-Small and re-usable components, the simpler things are the more powerful they turn out to be.
+
+[@thisdougb](https://twitter.com/thisdougb "Twitter")
