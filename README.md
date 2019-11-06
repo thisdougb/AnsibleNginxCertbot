@@ -65,4 +65,6 @@ For example, you may want to automate some sort of data load process.
 So open up access just for that process to complete, then close it off again to avoid mistakes.
 
 
+#### Author Information
+
 [@thisdougb](https://twitter.com/thisdougb "Twitter")
