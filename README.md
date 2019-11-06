@@ -58,7 +58,7 @@ Small and re-usable components, the simpler things are the more powerful they tu
 #### Neat Things
 
 The neat thing with all of this, is that when we want to renew our web certs we already have the code!
-Just re-run this on a schedule and it'll re-run Certbot with my EasyDNS API credentials (which are never stored on the instance).
+Just re-run this on a schedule and it'll re-run Certbot with EasyDNS API credentials (which are never stored in Vault).
 Code once, re-use often.
 
 Neat thing number two is the *digitalocean_firewall* role.
