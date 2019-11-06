@@ -55,6 +55,8 @@ You can save a lot of false-alerting by preventing SSH brute-force attempts in t
 This is orchestration, we're pulling together actions from different vendor APIs plus on-instance changes to get to our desired state.
 Small and re-usable components, the simpler things are the more powerful they turn out to be.
 
+#### Neat Things
+
 The neat thing with all of this, is that when we want to renew our web certs we already have the code!
 Just re-run this on a schedule and it'll re-run Certbot with my EasyDNS API credentials (which are never stored on the instance).
 Code once, re-use often.
