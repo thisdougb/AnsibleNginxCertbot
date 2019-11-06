@@ -1,7 +1,10 @@
 Role Name
 =========
 
-Install Nginx with a basic non-TLS config and a holding page, on Centos in particular.
+Install Nginx and a holding page, on Centos in particular.
+
+* with HTTP redirecting to HTTPS
+* expects certificate files to be available
 
 Requirements
 ------------
@@ -15,6 +18,7 @@ Name | Default | Required | Description
 --- | --- | --- | ---
 centos_nginx_webserver_name | mywebsite.com | yes | The name of the website to server traffic for.
 centos_nginx_webserver_root | /var/www | yes | Where the website exists on the filesystem, in a subdir here.
+centos_nginx_webserver_cert_path | undefined | yes | Path to the cert files (eg, /etc/letsencrypt/live/).
 
 Dependencies
 ------------
