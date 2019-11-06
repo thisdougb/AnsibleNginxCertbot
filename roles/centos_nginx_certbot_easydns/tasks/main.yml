@@ -31,7 +31,7 @@
       mode: 0755
 
 - name: run Certbot
-  shell: certbot certonly --manual --preferred-challenges=dns -i nginx --manual-auth-hook /tmp/certbot_easydns_validator.py --manual-cleanup-hook /tmp/certbot_easydns_cleanup.py -m {{ centos_nginx_certbot_easydns_email }} --manual-public-ip-logging-ok --non-interactive --agree-tos --reinstall -d {{ centos_nginx_certbot_easydns_domain }}
+  shell: certbot certonly --manual --preferred-challenges=dns --manual-auth-hook /tmp/certbot_easydns_validator.py --manual-cleanup-hook /tmp/certbot_easydns_cleanup.py -m {{ centos_nginx_certbot_easydns_email }} --manual-public-ip-logging-ok --non-interactive --agree-tos --reinstall -d {{ centos_nginx_certbot_easydns_domain }}
   environment:
       EASYDNS_API: "{{ centos_nginx_certbot_easydns_api }}"
       EASYDNS_TOKEN: "{{ centos_nginx_certbot_easydns_token }}"
