@@ -1,11 +1,15 @@
 # Ansible, Nginx, Certbot, and EasyDNS, on DigitalOcean
 Orchestration is feels like the undervalued sibling of automation.
-Building automation that performs solos is really useful, but when you coordinate in concert the real power of automation comes through.
+Building automation that performs solo tasks is really useful.
+But when you coordinate in concert, the real power of automation comes through.
 
-So here's a demo...
+So here's an example...
 
-I want to setup a web server, to serve pages over https.
-I'll run the web server on an existing instance in DigitalOcean, so we can focus on the higher layers.
+I want to setup a web server, to serve pages over https with real certificates.
+Certbot can give us real certs, and I'm hosting DNS records with EasyDNS.
+So I'll need to build some code to make the Cerbot DNS authentication play well with EasyDNS.
+
+I'll setup the web server on an existing instance in DigitalOcean, so we can focus on the higher layers.
 
 
 ```
@@ -27,12 +31,14 @@ The *digitalocean_firewall* role allows me to switch on and off SSH access to th
 This is done through calls to DigitalOcean's management API.
 It means SSH access is only made public during the playbook run, as I switch it off again at the end of the playbook.
 ```
-    - { role: centos_nginx_webserver, tags: nginx }
     - { role: centos_nginx_certbot_easydns, tags: certbot }
+    - { role: centos_nginx_webserver, tags: nginx }
 ```
-Here we are setting up nginx, and then updating its certificates with Certbot.
-So we're doing some on-instance ssh'ing, and then reaching over to the EasyDNS API to create validation records for Certbot.
-Once Certbot has done its thing, we go back to EasyDNS and delete the validation record.
+Here we are getting our certs first, and then setting up Nginx.
+This keeps things nice and simple.
+So in the certbot role we reach over to the EasyDNS API to create validation TXT records for Certbot.
+Once Certbot has done its thing, we go back to EasyDNS and delete the validation record to keep things clean.
+Once the certs are in place on the filesystem, we go ahead a install/config Nginx with those certs.
 ```
     - { role: digitalocean_firewall,
         vars: {
@@ -44,7 +50,11 @@ Once Certbot has done its thing, we go back to EasyDNS and delete the validation
       }
 ```
 Finally, once we're done working on the instance we switch off SSH access via the DigitalOcean API.
-Turning on SSH access only during playbook execution is strangely something the security-wonks haven't woken up to yet.
+You can save a lot of false-alerting by preventing SSH brute-force attempts in this way.
+
+The neat thing with all of this, is that when we want to renew our web certs we already have the code!
+Just re-run this on a schedule and it'll re-run Certbot with my EasyDNS API credentials (which are never stored on the instance).
+Code once, re-use often.
 
 This is orchestration, we're pulling together actions from two different vendor APIs and on-instance changes to get to our desired state.
 Small and re-usable components, the simpler things are the more powerful they turn out to be.
