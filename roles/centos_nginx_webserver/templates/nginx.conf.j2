@@ -37,6 +37,13 @@ http {
     include /etc/nginx/conf.d/*.conf;
 
     server {
+    	listen 80 default_server;
+    	listen [::]:80 default_server;
+    	server_name {{ centos_nginx_webserver_name }};
+    	return 301 https://$server_name$request_uri;
+    }
+
+    server {
         server_name  {{ centos_nginx_webserver_name }};
         root         {{ centos_nginx_webserver_webroot_path }};
 
@@ -56,6 +63,9 @@ http {
             location = /50x.html {
         }
 
+        listen              443 ssl;
+        server_name         {{ centos_nginx_webserver_name }};
+        ssl_certificate     {{ centos_nginx_webserver_cert_path }}{{ centos_nginx_webserver_name }}/cert.pem;
+        ssl_certificate_key {{ centos_nginx_webserver_cert_path }}{{ centos_nginx_webserver_name }}/privkey.pem;
     }
-
 }
