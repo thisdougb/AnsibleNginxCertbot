@@ -1,9 +1,10 @@
 ---
 # tasks file for roles/centos_selinux
 
-- name: Disable SELinux
+- name: "{{ centos_selinux_state }} SELinux"
   selinux:
-    state: disabled
+    state: "{{ centos_selinux_state | default('disabled')}}"
+    policy: "{{ centos_selinux_policy | default(omit) }}"
   register: task_result
 
 - name: Reboot immediately if there was a change.
