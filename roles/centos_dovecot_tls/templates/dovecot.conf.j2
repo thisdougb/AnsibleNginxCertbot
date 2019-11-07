@@ -94,3 +94,12 @@ userdb {
     # v2.2.24+:
     auth_verbose = default
 }
+
+service auth {
+    unix_listener /var/spool/postfix/private/auth {
+        mode = 0660
+        # Assuming the default Postfix user and group
+        user = postfix
+        group = postfix
+    }
+}

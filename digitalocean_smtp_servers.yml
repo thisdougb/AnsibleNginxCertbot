@@ -32,6 +32,12 @@
         },
         tags: dovecot }
 
+    - { role: centos_postfix,
+        vars: {
+            postfix_tls_server_domainname: "{{ mail_server_domainname }}"
+        },
+        tags: postfix }
+
     - { role: digitalocean_firewall,
         vars: {
             digitalocean_firewall_name: fw-smtp-servers,

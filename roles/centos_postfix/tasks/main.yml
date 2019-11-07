@@ -1,0 +1,32 @@
+---
+# tasks file for roles/centos_postfix
+
+- name: ensure postfix is installed
+  yum:
+      name: postfix
+      state: present
+
+- name: send postfix main.cf
+  template:
+    src: main.cf.j2
+    dest: /etc/postfix/main.cf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: ensure map_sender_login is up to date
+  lineinfile:
+    path: /etc/postfix/map_sender_login
+    regexp: "^{{ item.login }} {{ item.login }}"
+    line: "{{ item.login }} {{ item.login }}"
+    mode: 0644
+    owner: root
+    group: root
+    create: yes
+  with_items: "{{ dovecot_mailboxes }}"
+  no_log: yes
+  register: sender_login_map_changed
+
+- name: update map_sender_login db
+  command: /usr/sbin/postmap hash:/etc/postfix/map_sender_login
+  when: sender_login_map_changed.changed
