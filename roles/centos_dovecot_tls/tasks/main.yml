@@ -40,8 +40,7 @@
       name: dovecot
       state: restarted
 
-# printf 'password\npassword\n' | doveadm pw -s SHA512-CRYPT
 - block:
-    - name: add dovecot users
-      include_tasks: add_dovecot_user.yml
-      loop: "{{ dovecot_users }}"
+    - name: add dovecot mailboxes
+      include_tasks: add_dovecot_mailbox.yml
+      loop: "{{ dovecot_mailboxes }}"
