@@ -1,0 +1,49 @@
+---
+# tasks file for roles/centos_certbot_easydns
+
+- name: install epel repo
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+
+- name: install Certbot packages
+  yum:
+      name: [certbot, python2-certbot-nginx]
+      state: present
+
+- name: copy easydns validator script for Certbot
+  copy:
+      src: certbot_easydns_validator.py
+      dest: /tmp/certbot_easydns_validator.py
+      force: yes
+      owner: root
+      group: root
+      mode: 0755
+
+- name: copy easydns cleanup script for Certbot
+  copy:
+      src: certbot_easydns_cleanup.py
+      dest: /tmp/certbot_easydns_cleanup.py
+      force: yes
+      owner: root
+      group: root
+      mode: 0755
+
+- name: run Certbot
+  shell: >
+    /usr/bin/certbot certonly
+    --agree-tos
+    --manual
+    --manual-public-ip-logging-ok
+    --non-interactive
+    --preferred-challenges=dns
+    --reinstall
+    --manual-auth-hook /tmp/certbot_easydns_validator.py
+    --manual-cleanup-hook /tmp/certbot_easydns_cleanup.py
+    -m {{ centos_certbot_easydns_email }}
+    -d {{ centos_certbot_easydns_domain }}
+  environment:
+      EASYDNS_API: "{{ centos_certbot_easydns_api }}"
+      EASYDNS_TOKEN: "{{ centos_certbot_easydns_token }}"
+      EASYDNS_KEY: "{{ centos_certbot_easydns_key }}"

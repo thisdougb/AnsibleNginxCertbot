@@ -10,7 +10,16 @@
         tags: [ ssh_on ]
       }
 
-    - { role: centos_nginx_certbot_easydns, tags: certbot }
+    - { role: centos_certbot_easydns,
+        vars: {
+            centos_certbot_easydns_api: "{{ easydns_api }}",
+            centos_certbot_easydns_token: "{{ easydns_token }}",
+            centos_certbot_easydns_key: "{{ easydns_key }}",
+            centos_certbot_easydns_domain: "{{ website_domain }}",
+            centos_certbot_easydns_email: "{{ website_domain_email }}"
+        },
+        tags: certbot }
+
     - { role: centos_nginx_webserver, tags: nginx }
 
     - { role: digitalocean_firewall,
