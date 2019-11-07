@@ -3,6 +3,8 @@ Role Name
 
 Installs Certbot, and drops EasyDNS hook scripts into /tmp and attempts to get certificates with EasyDNS validation.
 
+Note, the certificate will include the domain and a wildcard for subdomains.
+
 Requirements
 ------------
 
