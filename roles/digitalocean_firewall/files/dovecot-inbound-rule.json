@@ -1,0 +1,24 @@
+{
+  "inbound_rules": [
+      {
+          "protocol": "tcp",
+          "ports": "993",
+          "sources": {
+              "addresses": [
+                  "0.0.0.0/0",
+                  "::/0"
+              ]
+          }
+      },
+      {
+          "protocol": "tcp",
+          "ports": "995",
+          "sources": {
+              "addresses": [
+                  "0.0.0.0/0",
+                  "::/0"
+              ]
+          }
+      }
+  ]
+}

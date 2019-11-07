@@ -1,0 +1,22 @@
+# doveadm requires the password twice with a newline in between
+- name: get encrypted password string
+  shell: "printf '{{ [item.password, item.password, ''] | list | join('\n') }}' | doveadm pw -s sha512-crypt"
+  register: output
+
+- name: ensure mail user exists in dovecot
+  lineinfile:
+    path: /etc/dovecot/users
+    regexp: "^{{ item.login }}:"
+    line: "{{ item.login }}:{{ output.stdout }}:"
+    mode: 0644
+    owner: root
+    group: root
+    create: yes
+
+- name: ensure mail location exists
+  file:
+      path: '/mail/{{ item.login.split("@")[1] | lower }}/{{ item.login.split("@")[0] | lower }}'
+      state: directory
+      owner: vmail
+      group: vmail
+      mode: 0700

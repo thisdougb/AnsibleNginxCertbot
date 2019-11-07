@@ -1,0 +1,4 @@
+---
+# defaults file for roles/centos_dovecot_tls
+
+dovecot_tls_rpm_version: dovecot-2.2*

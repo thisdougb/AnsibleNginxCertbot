@@ -21,10 +21,25 @@
             centos_certbot_easydns_api: "{{ easydns_api }}",
             centos_certbot_easydns_token: "{{ easydns_token }}",
             centos_certbot_easydns_key: "{{ easydns_key }}",
-            centos_certbot_easydns_domain: "{{ smtp_domain }}",
-            centos_certbot_easydns_email: "{{ smtp_domain_email }}"
+            centos_certbot_easydns_domain: "{{ mail_server_domainname }}",
+            centos_certbot_easydns_email: "{{ mail_server_domainname_contact }}"
         },
         tags: certbot }
+
+    - { role: centos_dovecot_tls,
+        vars: {
+            dovecot_tls_server_domainname: "{{ mail_server_domainname }}"
+        },
+        tags: dovecot }
+
+    - { role: digitalocean_firewall,
+        vars: {
+            digitalocean_firewall_name: fw-smtp-servers,
+            digitalocean_firewall_rule: dovecot-inbound,
+            digitalocean_firewall_rule_status: enable
+        },
+        tags: [ dovecot_on ]
+      }
 
     - { role: digitalocean_firewall,
         vars: {

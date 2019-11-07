@@ -1,0 +1,47 @@
+---
+# tasks file for roles/centos_dovecot_tls
+
+#- name: install Dovecot IMAP rpm (version pinned in role defaults)
+#  yum:
+#      name: "{{ dovecot_tls_rpm_version }}"
+#      state: latest
+
+- name: dovemail vmail group
+  group:
+    name: vmail
+    state: present
+
+- name: dovemail vmail user
+  user:
+      name: vmail
+      comment: Dovecot vmail user
+      uid: 1059
+      group: vmail
+      shell: /sbin/nologin
+
+- name: deploy dovecot.conf
+  template:
+      src: dovecot.conf.j2
+      dest: /etc/dovecot/dovecot.conf
+      mode: 0644
+      owner: root
+      group: root
+
+- name: ensure mail location dir exists
+  file:
+      path: /mail/
+      state: directory
+      mode: 0755
+      owner: root
+      group: root
+
+- name: restart dovecot
+  service:
+      name: dovecot
+      state: restarted
+
+# printf 'password\npassword\n' | doveadm pw -s SHA512-CRYPT
+- block:
+    - name: add dovecot users
+      include_tasks: add_dovecot_user.yml
+      loop: "{{ dovecot_users }}"
