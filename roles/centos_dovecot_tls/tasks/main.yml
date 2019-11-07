@@ -39,6 +39,7 @@
   service:
       name: dovecot
       state: restarted
+      enabled: yes
 
 - block:
     - name: add dovecot mailboxes
