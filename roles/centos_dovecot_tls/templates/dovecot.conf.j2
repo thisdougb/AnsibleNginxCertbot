@@ -61,8 +61,8 @@ ssl_cert = </etc/letsencrypt/live/{{ dovecot_tls_server_domainname }}/fullchain.
 ssl_key = </etc/letsencrypt/live/{{ dovecot_tls_server_domainname }}/privkey.pem
 ssl_prefer_server_ciphers=yes
 
-auth_debug=yes
-auth_debug_passwords=yes
+auth_debug=no
+auth_debug_passwords=no
 
 passdb {
     driver = passwd-file
@@ -82,7 +82,7 @@ passdb {
     result_success = return-ok
 
     # v2.2.24+
-    auth_verbose = yes
+    auth_verbose = default
 }
 
 userdb {
@@ -92,5 +92,5 @@ userdb {
     override_fields =
 
     # v2.2.24+:
-    auth_verbose = yes
+    auth_verbose = default
 }

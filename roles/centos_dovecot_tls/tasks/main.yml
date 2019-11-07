@@ -1,10 +1,10 @@
 ---
 # tasks file for roles/centos_dovecot_tls
 
-#- name: install Dovecot IMAP rpm (version pinned in role defaults)
-#  yum:
-#      name: "{{ dovecot_tls_rpm_version }}"
-#      state: latest
+- name: install Dovecot IMAP rpm (version pinned in role defaults)
+  yum:
+      name: "{{ dovecot_tls_rpm_version }}"
+      state: latest
 
 - name: dovemail vmail group
   group:
