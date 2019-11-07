@@ -16,6 +16,7 @@
         },
         tags: selinux }
 
+    # CERBOT
     - { role: centos_certbot_easydns,
         vars: {
             centos_certbot_easydns_api: "{{ easydns_api }}",
@@ -26,17 +27,12 @@
         },
         tags: certbot }
 
+    # DOVECOT
     - { role: centos_dovecot_tls,
         vars: {
             dovecot_tls_server_domainname: "{{ mail_server_domainname }}"
         },
         tags: dovecot }
-
-    - { role: centos_postfix,
-        vars: {
-            postfix_tls_server_domainname: "{{ mail_server_domainname }}"
-        },
-        tags: postfix }
 
     - { role: digitalocean_firewall,
         vars: {
@@ -45,6 +41,23 @@
             digitalocean_firewall_rule_status: enable
         },
         tags: [ dovecot_on ]
+      }
+
+    # POSTFIX
+    - { role: centos_postfix,
+        vars: {
+            centos_postfix_server_domainname: "{{ mail_server_domainname }}"
+            centos_postfix_server_name: "{{ mail_server_fqdn }}"
+        },
+        tags: postfix }
+
+    - { role: digitalocean_firewall,
+        vars: {
+            digitalocean_firewall_name: fw-smtp-servers,
+            digitalocean_firewall_rule: postfix-inbound,
+            digitalocean_firewall_rule_status: enable
+        },
+        tags: [ postfix_on ]
       }
 
     - { role: digitalocean_firewall,

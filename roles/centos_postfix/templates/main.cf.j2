@@ -14,8 +14,8 @@ mail_owner = postfix
 #default_privs = nobody
 
 # INTERNET HOST AND DOMAIN NAMES
-myhostname = {{ postfix_server_fqdn }}
-mydomain = {{ postfix_server_domain }}
+myhostname = {{ centos_postfix_server_fqdn }}
+mydomain = {{ centos_postfix_server_domainname }}
 
 # SENDING MAIL
 # mail sent from this host locally, gets this domain name
