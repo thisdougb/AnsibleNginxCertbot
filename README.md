@@ -76,7 +76,8 @@ Not only is it re-usable and simple, it's also very easy to extend with addition
 For example, you may want to automate some sort of data load process.
 So open up access just for that process to complete, then close it off again to avoid mistakes.
 
-
+I added another playbook to deploy the cert to smtp servers.
+This meant upgrading the cert to include a wildcard for subdomains.
 #### Author Information
 
 [@thisdougb](https://twitter.com/thisdougb "Twitter")
