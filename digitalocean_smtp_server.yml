@@ -10,7 +10,11 @@
         tags: [ ssh_on ]
       }
 
-    - { role: centos_selinux, tags: selinux }
+    - { role: centos_selinux,
+        vars: {
+            centos_selinux_state: disabled  # for demo only
+        },
+        tags: selinux }
 
     - { role: digitalocean_firewall,
         vars: {
