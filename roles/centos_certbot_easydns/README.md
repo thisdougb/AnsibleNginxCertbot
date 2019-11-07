@@ -17,7 +17,7 @@ centos_certbot_easydns_api | undefined | yes | The EasyDNS API URL.
 centos_certbot_easydns_token | undefined | yes | Your EasyDNS API Token.
 centos_certbot_easydns_key | undefined | yes | Your EasyDNS API Key.
 centos_certbot_easydns_domain | undefined | yes | The domain you want certificates for.
-centos_certbot_easydns_email | undefined | yes | The email address for LetEncrypt comms.
+centos_certbot_easydns_email | undefined | yes | The email address for LetEncrypt notifications.
 
 Dependencies
 ------------

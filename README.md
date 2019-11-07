@@ -31,12 +31,22 @@ The *digitalocean_firewall* role allows me to switch on and off SSH access to th
 This is done through calls to DigitalOcean's management API.
 It means SSH access is only made public during the playbook run, as I switch it off again at the end of the playbook.
 ```
-    - { role: centos_nginx_certbot_easydns, tags: certbot }
+    - { role: centos_certbot_easydns,
+        vars: {
+            centos_certbot_easydns_api: "{{ easydns_api }}",
+            centos_certbot_easydns_token: "{{ easydns_token }}",
+            centos_certbot_easydns_key: "{{ easydns_key }}",
+            centos_certbot_easydns_domain: "{{ website_domain }}",
+            centos_certbot_easydns_email: "{{ website_domain_email }}"
+        },
+        tags: certbot }
+
     - { role: centos_nginx_webserver, tags: nginx }
 ```
 Here we are getting our certs first, and then setting up Nginx.
-This keeps things nice and simple.
+This keeps things nice and simple, one thing at a time.
 So in the certbot role we reach over to the EasyDNS API to create validation TXT records for Certbot.
+
 Once Certbot has done its thing, we go back to EasyDNS and delete the validation record to keep things clean.
 Once the certs are in place on the filesystem, we go ahead a install/config Nginx with those certs.
 ```
