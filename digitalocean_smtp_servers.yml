@@ -16,7 +16,6 @@
         },
         tags: selinux }
 
-    # CERBOT
     - { role: centos_certbot_easydns,
         vars: {
             centos_certbot_easydns_api: "{{ easydns_api }}",
@@ -27,7 +26,6 @@
         },
         tags: certbot }
 
-    # DOVECOT
     - { role: centos_dovecot_tls,
         vars: {
             dovecot_tls_server_domainname: "{{ mail_server_domainname }}"
@@ -43,10 +41,9 @@
         tags: [ dovecot_on ]
       }
 
-    # POSTFIX
     - { role: centos_postfix,
         vars: {
-            centos_postfix_server_domainname: "{{ mail_server_domainname }}"
+            centos_postfix_server_domainname: "{{ mail_server_domainname }}",
             centos_postfix_server_name: "{{ mail_server_fqdn }}"
         },
         tags: postfix }
