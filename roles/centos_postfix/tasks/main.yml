@@ -23,7 +23,7 @@
     owner: root
     group: root
     create: yes
-  with_items: "{{ dovecot_mailboxes }}"
+  with_items: "{{ dovecot_mailboxes | default([]) }}"
   no_log: yes
   register: sender_login_map_changed
 
@@ -40,7 +40,7 @@
     owner: root
     group: root
     create: yes
-  with_items: "{{ postfix_virtual_aliases }}"
+  with_items: "{{ postfix_virtual_aliases | default([]) }}"
   no_log: yes
   register: map_virtual_alias_changed
 
