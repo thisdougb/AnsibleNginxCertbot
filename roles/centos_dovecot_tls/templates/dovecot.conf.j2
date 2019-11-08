@@ -6,7 +6,7 @@
 # instead of copy&pasting files when posting to the Dovecot mailing list.
 
 # Protocols we want to be serving.
-protocols = imap pop3
+protocols = imap pop3 lmtp
 
 #listen = *, ::
 #base_dir = /var/run/dovecot/
@@ -96,10 +96,17 @@ userdb {
 }
 
 service auth {
-    unix_listener /var/spool/postfix/private/auth {
+    unix_listener /var/spool/postfix/private/dovecot-auth {
         mode = 0660
-        # Assuming the default Postfix user and group
         user = postfix
         group = postfix
     }
+}
+
+service lmtp {
+ unix_listener /var/spool/postfix/private/dovecot-lmtp {
+   mode = 0600
+   user = postfix
+   group = postfix
+  }
 }
