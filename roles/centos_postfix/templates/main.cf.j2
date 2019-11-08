@@ -68,8 +68,8 @@ smtpd_recipient_restrictions =  permit_mynetworks, permit_sasl_authenticated, re
 smtpd_sender_restrictions =  permit_mynetworks, permit_sasl_authenticated, reject_sender_login_mismatch
 smtpd_reject_unlisted_sender = yes
 
-smtpd_milters = unix:/var/run/opendkim/opendkim.sock
-non_smtpd_milters = unix:/var/run/opendkim/opendkim.sock
+smtpd_milters = unix:/var/run/opendkim/opendkim.sock, unix:/var/run/opendmarc/opendmarc.sock
+non_smtpd_milters = unix:/var/run/opendkim/opendkim.sock, unix:/var/run/opendmarc/opendmarc.sock
 
 # MAPS
 smtpd_sender_login_maps = hash:/etc/postfix/map_sender_login

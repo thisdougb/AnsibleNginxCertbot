@@ -1,0 +1,21 @@
+- name: ensure opendmarc is installed
+  yum:
+      name: opendmarc
+      state: present
+  tags: opendmarc
+
+- name: ensure opendmarc.conf is updated
+  template:
+    src: opendmarc.conf.j2
+    dest: /etc/opendmarc.conf
+    mode: 0644
+    owner: root
+    group: root
+  tags: opendmarc
+
+- name: restart opendmarc
+  service:
+      name: opendmarc
+      state: restarted
+      enabled: yes
+  tags: opendmarc

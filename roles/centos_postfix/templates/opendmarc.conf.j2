@@ -1,0 +1,42 @@
+## opendmarc.conf -- configuration file for OpenDMARC filter
+##
+## Copyright (c) 2012-2015, The Trusted Domain Project.  All rights reserved.
+
+## CONFIGURATION OPTIONS
+
+AuthservID {{ centos_postfix_server_fqdn }}
+# AuthservIDWithJobID false
+# AutoRestart false
+# AutoRestartCount 0
+# AutoRestartRate n/t[u]
+# Background true
+# BaseDirectory /var/run/opendmarc
+# ChangeRootDirectory /var/chroot/opendmarc
+CopyFailuresTo dmarc@cardkist.com
+# DNSTimeout 5
+# EnableCoreDumps false
+# FailureReports false
+# FailureReportsBcc postmaster@example.coom
+# FailureReportsOnNone false
+FailureReportsSentBy dmarc@cardkist.com
+# HistoryFile /var/spool/opendmarc/opendmarc.dat
+IgnoreAuthenticatedClients true
+# IgnoreHosts /etc/opendmarc/ignore.hosts
+# IgnoreMailFrom example.com
+# MilterDebug 2
+PidFile /var/run/opendmarc/opendmarc.pid
+# PublicSuffixList path
+# RecordAllMessages false
+# RejectFailures false
+# ReportCommand /usr/sbin/sendmail -t
+# RequiredHeaders false
+Socket unix:/var/run/opendmarc/opendmarc.sock
+SoftwareHeader true
+SPFIgnoreResults true
+SPFSelfValidate true
+Syslog true
+# SyslogFacility mail
+TrustedAuthservIDs {{ centos_postfix_server_fqdn }}
+# UMask 007
+UMask 000
+UserID opendmarc:mail
