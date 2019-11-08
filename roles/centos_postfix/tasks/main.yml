@@ -48,6 +48,62 @@
   command: /usr/sbin/postmap hash:/etc/postfix/map_virtual_alias
   when: centos_postfix_virtual_alias_map_result.changed
 
+- name: ensure opendkim is installed
+  yum:
+      name: opendkim
+      state: present
+
+- name: ensure opendkim.conf is updated
+  template:
+    src: opendkim.conf.j2
+    dest: /etc/opendkim.conf
+    mode: 0644
+    owner: root
+    group: root
+  tags: dkim
+
+- name: ensure DKIM SingingTable is up to date
+  lineinfile:
+    path: /etc/opendkim/SigningTable
+    regexp: "{{ item }}"
+    line: "*@{{ item }} {{ item }}"
+    mode: 0644
+    owner: opendkim
+    group: opendkim
+    create: yes
+  with_items: "{{ centos_postfix_hosted_domains | default([]) }}"
+  tags: dkim
+
+- name: ensure DKIM KeyTable is up to date
+  lineinfile:
+    path: /etc/opendkim/KeyTable
+    regexp: "^{{ item }} {{ item }}:mail:/etc/opendkim/keys/{{ item }}.dkim.private"
+    line: "{{ item }} {{ item }}:mail:/etc/opendkim/keys/{{ item }}.dkim.private"
+    mode: 0644
+    owner: opendkim
+    group: opendkim
+    create: yes
+  with_items: "{{ centos_postfix_hosted_domains | default([]) }}"
+  tags: dkim
+
+- name: update DKIM domain keys
+  copy:
+      content: "{{ item.private_key }}"
+      dest: "/etc/opendkim/keys/{{ item.name }}.dkim.private"
+      owner: opendkim
+      group: opendkim
+      mode: 0400
+  with_items: "{{ postfix_hosted_domains_dkim_keys }}"
+  no_log: yes
+  tags: dkim
+
+- name: restart opendkim
+  service:
+      name: opendkim
+      state: restarted
+      enabled: yes
+  tags: dkim
+
 - name: restart postfix
   service:
       name: postfix

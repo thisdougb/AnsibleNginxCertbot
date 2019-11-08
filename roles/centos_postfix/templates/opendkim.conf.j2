@@ -1,0 +1,46 @@
+## BASIC OPENDKIM CONFIGURATION FILE
+## See opendkim.conf(5) or /usr/share/doc/opendkim/opendkim.conf.sample for more
+
+## BEFORE running OpenDKIM you must:
+
+## - make your MTA (Postfix, Sendmail, etc.) aware of OpenDKIM
+## - generate keys for your domain (if signing)
+## - edit your DNS records to publish your public keys (if signing)
+
+## See /usr/share/doc/opendkim/INSTALL for detailed instructions.
+
+## CONFIGURATION OPTIONS
+PidFile	/var/run/opendkim/opendkim.pid
+
+##  Selects operating modes. Valid modes are s (sign) and v (verify). Default is v.
+Mode	sv
+
+Syslog	yes
+SyslogSuccess	yes
+LogWhy	yes
+UserID	opendkim:opendkim
+Socket local:/var/run/opendkim/opendkim.sock
+
+##  Required to use local socket with MTAs that access the socket as a non-
+##  privileged user (e.g. Postfix)
+#Umask	002
+Umask	000
+
+# Statistics	/var/spool/opendkim/stats.dat
+SendReports	yes
+# ReportAddress	"Example.com Postmaster" <postmaster@example.com>
+SoftwareHeader	yes
+
+## SIGNING OPTIONS
+Canonicalization	relaxed/relaxed
+# Domain	example.com
+Selector	mail
+MinimumKeyBits	2048
+KeyTable	/etc/opendkim/KeyTable
+SigningTable	refile:/etc/opendkim/SigningTable
+
+# ExternalIgnoreList	refile:/etc/opendkim/TrustedHosts
+# InternalHosts	refile:/etc/opendkim/TrustedHosts
+# PeerList	X.X.X.X
+OversignHeaders	From
+# QueryCache	yes

@@ -46,7 +46,8 @@
             centos_postfix_server_domain: "{{ mail_server_domainname }}",
             centos_postfix_server_fqdn: "{{ mail_server_fqdn }}",
             centos_postfix_sender_login_map: "{{ dovecot_mailboxes }}",
-            centos_postfix_virtual_alias_map: "{{ postfix_virtual_aliases }}"
+            centos_postfix_virtual_alias_map: "{{ postfix_virtual_aliases }}",
+            centos_postfix_hosted_domains: "{{ postfix_hosted_domains }}"
         },
         tags: postfix }
 
