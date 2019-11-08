@@ -54,3 +54,15 @@
       state: restarted
       enabled: yes
   tags: opendkim
+
+- name: Reset opendkim run dir perms, giving postfix access
+  file:
+      path: /var/run/opendkim/
+      state: directory
+      mode: '0755'
+
+- name: add cron to ensure postfix has permissions to unix:socket
+  cron:
+    name: "opendkim permissions reset"
+    special_time: reboot
+    job: "chmod 755 /var/run/opendkim/"

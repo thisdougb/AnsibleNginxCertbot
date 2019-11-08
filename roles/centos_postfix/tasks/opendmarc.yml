@@ -19,3 +19,15 @@
       state: restarted
       enabled: yes
   tags: opendmarc
+
+- name: Reset opendmarc run dir perms, giving postfix access
+  file:
+      path: /var/run/opendmarc/
+      state: directory
+      mode: '0755'
+
+- name: add cron to ensure postfix has permissions to unix:socket
+  cron:
+    name: "opendmarc permissions reset"
+    special_time: reboot
+    job: "chmod 755 /var/run/opendmarc/"
