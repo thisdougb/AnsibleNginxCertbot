@@ -23,13 +23,13 @@
     owner: root
     group: root
     create: yes
-  with_items: "{{ dovecot_mailboxes | default([]) }}"
+  with_items: "{{ centos_postfix_sender_login_map | default([]) }}"
   no_log: yes
-  register: sender_login_map_changed
+  register: centos_postfix_sender_login_map_result
 
 - name: update map_sender_login db
   command: /usr/sbin/postmap hash:/etc/postfix/map_sender_login
-  when: sender_login_map_changed.changed
+  when: centos_postfix_sender_login_map_result.changed
 
 - name: ensure map_virtual_alias is up to date
   lineinfile:
@@ -40,13 +40,13 @@
     owner: root
     group: root
     create: yes
-  with_items: "{{ postfix_virtual_aliases | default([]) }}"
+  with_items: "{{ centos_postfix_virtual_alias_map | default([]) }}"
   no_log: yes
-  register: map_virtual_alias_changed
+  register: centos_postfix_virtual_alias_map_result
 
 - name: update map_virtual_alias db
   command: /usr/sbin/postmap hash:/etc/postfix/map_virtual_alias
-  when: map_virtual_alias_changed.changed
+  when: centos_postfix_virtual_alias_map_result.changed
 
 - name: restart postfix
   service:
