@@ -30,3 +30,26 @@
 - name: update map_sender_login db
   command: /usr/sbin/postmap hash:/etc/postfix/map_sender_login
   when: sender_login_map_changed.changed
+
+- name: ensure map_virtual_alias is up to date
+  lineinfile:
+    path: /etc/postfix/map_virtual_alias
+    regexp: "^{{ item }}"
+    line: "{{ item }}"
+    mode: 0644
+    owner: root
+    group: root
+    create: yes
+  with_items: "{{ postfix_virtual_aliases }}"
+  no_log: yes
+  register: map_virtual_alias_changed
+
+- name: update map_virtual_alias db
+  command: /usr/sbin/postmap hash:/etc/postfix/map_virtual_alias
+  when: map_virtual_alias_changed.changed
+
+- name: restart postfix
+  service:
+      name: postfix
+      state: restarted
+      enabled: yes

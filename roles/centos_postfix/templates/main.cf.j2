@@ -15,7 +15,7 @@ mail_owner = postfix
 
 # INTERNET HOST AND DOMAIN NAMES
 myhostname = {{ centos_postfix_server_fqdn }}
-mydomain = {{ centos_postfix_server_domainname }}
+mydomain = {{ centos_postfix_server_domain }}
 
 # SENDING MAIL
 # mail sent from this host locally, gets this domain name
@@ -27,8 +27,8 @@ inet_interfaces = all
 # Enable IPv4, and IPv6 if supported
 inet_protocols = all
 
-# What domains to receive mail for
-mydestination = {{ postfix_hosted_domains | join(",") }}
+# What domains to receive mail for, none are local
+mydestination =
 
 # REJECTING MAIL FOR UNKNOWN LOCAL USERS
 local_recipient_maps =
@@ -43,7 +43,7 @@ relayhost =
 
 # SMTP AUTH
 smtpd_sasl_type = dovecot
-smtpd_sasl_path = private/auth
+smtpd_sasl_path = private/dovecot-auth
 smtpd_sasl_auth_enable = yes
 smtpd_sasl_security_options = noanonymousm, noplaintext, nodictionary
 smtpd_sasl_local_domain = $mydomain
@@ -51,9 +51,9 @@ smtpd_sasl_local_domain = $mydomain
 # SMTP TLS
 smtpd_tls_auth_only = yes
 smtpd_sasl_tls_security_options = noanonymous
-smtpd_tls_cert_file = /etc/letsencrypt/live/{{ postfix_server_domain }}/cert.pem
-smtpd_tls_key_file = /etc/letsencrypt/live/{{ postfix_server_domain }}/privkey.pem
-smtpd_tls_CAfile = /etc/letsencrypt/live/{{ postfix_server_domain }}/chain.pem
+smtpd_tls_cert_file = /etc/letsencrypt/live/{{ centos_postfix_server_domain }}/cert.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/{{ centos_postfix_server_domain }}/privkey.pem
+smtpd_tls_CAfile = /etc/letsencrypt/live/{{ centos_postfix_server_domain }}/chain.pem
 smtpd_tls_security_level = may
 smtpd_tls_loglevel = 1
 
@@ -63,7 +63,8 @@ smtpd_helo_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_n
 
 smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 
-smtpd_recipient_restrictions =  permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination, check_policy_service unix:private/spfpolicy
+#smtpd_recipient_restrictions =  permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination, check_policy_service unix:private/spfpolicy
+smtpd_recipient_restrictions =  permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 smtpd_sender_restrictions =  permit_mynetworks, permit_sasl_authenticated, reject_sender_login_mismatch
 smtpd_reject_unlisted_sender = yes
 
@@ -91,22 +92,10 @@ alias_maps = hash:/etc/aliases
 #recipient_delimiter = +
 
 # DELIVERY TO MAILBOX
-#home_mailbox = Mailbox
-#home_mailbox = Maildir/
-#mail_spool_directory = /var/mail
-#mail_spool_directory = /var/spool/mail
-#mailbox_command = /some/where/procmail
-#mailbox_command = /some/where/procmail -a "$EXTENSION"
-
-#mailbox_transport = lmtp:unix:/var/lib/imap/socket/lmtp
-#mailbox_transport = cyrus
-
-#fallback_transport = lmtp:unix:/var/lib/imap/socket/lmtp
-#fallback_transport =
-
-#luser_relay = $user@other.host
-#luser_relay = $local@other.host
-#luser_relay = admin+$local
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+#dovecot_destination_recipient_limit = 1
+virtual_mailbox_domains = {{ postfix_hosted_domains | join(",") }}
+virtual_alias_maps = hash:/etc/postfix/map_virtual_alias
 
 # JUNK MAIL CONTROLS
 #header_checks = regexp:/etc/postfix/header_checks
