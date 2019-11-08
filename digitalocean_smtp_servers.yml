@@ -43,8 +43,8 @@
 
     - { role: centos_postfix,
         vars: {
-            centos_postfix_server_domainname: "{{ mail_server_domainname }}",
-            centos_postfix_server_name: "{{ mail_server_fqdn }}"
+            centos_postfix_server_domain: "{{ mail_server_domainname }}",
+            centos_postfix_server_fqdn: "{{ mail_server_fqdn }}"
         },
         tags: postfix }
 
