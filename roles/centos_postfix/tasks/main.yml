@@ -14,7 +14,7 @@
     owner: root
     group: root
 
-- name: ensure map_sender_login is up to date
+- name: ensure sender_login_map is up to date (our own user list)
   lineinfile:
     path: /etc/postfix/map_sender_login
     regexp: "^{{ item.login }} {{ item.login }}"
@@ -31,7 +31,7 @@
   command: /usr/sbin/postmap hash:/etc/postfix/map_sender_login
   when: centos_postfix_sender_login_map_result.changed
 
-- name: ensure map_virtual_alias is up to date
+- name: ensure virtual_alias_map is up to date (our own user aliases)
   lineinfile:
     path: /etc/postfix/map_virtual_alias
     regexp: "^{{ item }}"
