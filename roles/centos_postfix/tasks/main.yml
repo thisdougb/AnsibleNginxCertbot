@@ -6,10 +6,18 @@
       name: postfix
       state: present
 
-- name: send postfix main.cf
+- name: update postfix main.cf
   template:
     src: main.cf.j2
     dest: /etc/postfix/main.cf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: update postfix master.cf
+  template:
+    src: master.cf.j2
+    dest: /etc/postfix/master.cf
     mode: 0644
     owner: root
     group: root
@@ -47,6 +55,23 @@
 - name: update map_virtual_alias db
   command: /usr/sbin/postmap hash:/etc/postfix/map_virtual_alias
   when: centos_postfix_virtual_alias_map_result.changed
+
+- name: ensure filter_recipient_domains is up to date (our own user aliases)
+  lineinfile:
+    path: /etc/postfix/filter_recipient_domains
+    regexp: "^{{ item }}"
+    line: "{{ item }}   FILTER amavisfeed:[127.0.0.1]:10024"
+    mode: 0644
+    owner: root
+    group: root
+    create: yes
+  with_items: "{{ [ 'soogate.com' ] | list | default([]) }}"
+  no_log: yes
+  register: centos_postfix_filter_recipient_domains_result
+
+- name: update filter_recipient_domains db
+  command: /usr/sbin/postmap hash:/etc/postfix/filter_recipient_domains
+  when: centos_postfix_filter_recipient_domains_result.changed
 
 - name: Include opendkim play
   include: opendkim.yml

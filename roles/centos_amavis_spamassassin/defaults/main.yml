@@ -1,0 +1,6 @@
+---
+# defaults file for roles/centos_amavis_spamassassin
+
+centos_amavis_spamassassin_required_rpms:
+    - amavisd-new
+    - spamassassin

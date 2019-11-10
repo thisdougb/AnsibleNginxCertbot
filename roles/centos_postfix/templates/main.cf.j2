@@ -59,15 +59,31 @@ smtpd_tls_loglevel = 1
 
 # SENDER CONTROLS
 smtpd_delay_reject = yes
-smtpd_helo_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_non_fqdn_helo_hostname, permit
 smtpd_helo_required     = yes
 strict_rfc821_envelopes = yes
 disable_vrfy_command = yes
+smtpd_helo_restrictions =
+    permit_mynetworks,
+    permit_sasl_authenticated,
+    reject_non_fqdn_helo_hostname,
+    permit
 
-smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+smtpd_relay_restrictions =
+    permit_mynetworks,
+    permit_sasl_authenticated,
+    reject_unauth_destination
 
-#smtpd_recipient_restrictions =  permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination, check_policy_service unix:private/spfpolicy
-smtpd_recipient_restrictions =  permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination, reject_non_fqdn_sender, reject_unknown_sender_domain
+smtpd_recipient_restrictions =
+    permit_mynetworks,
+    permit_sasl_authenticated,
+    reject_unauth_pipelining,
+    reject_unauth_destination,
+    reject_non_fqdn_sender,
+    reject_unknown_sender_domain,
+    reject_unverified_recipient,
+    reject_rbl_client zen.spamhaus.org,
+    check_recipient_access hash:/etc/postfix/filter_recipient_domains
+
 smtpd_sender_restrictions =  permit_mynetworks, permit_sasl_authenticated, reject_sender_login_mismatch
 smtpd_reject_unlisted_sender = yes
 

@@ -1,0 +1,25 @@
+---
+# tasks file for roles/centos_amavis_spamassassin
+
+- name: install amavis and spamassassin packages
+  yum:
+      name: "{{ centos_amavis_spamassassin_required_rpms }}"
+      state: present
+
+- name: quote joined domain list for amavisd.conf file
+  set_fact:
+      centos_amavis_spamassassin_quoted_domain_list: "'{{ \"', '\".join(centos_amavis_spamassassin_hosted_domains) }}'"
+
+- name: update amavisd.conf
+  template:
+    src: amavisd.conf.j2
+    dest: /etc/amavisd/amavisd.conf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: restart amavisd
+  service:
+      name: amavisd
+      state: restarted
+      enabled: yes
