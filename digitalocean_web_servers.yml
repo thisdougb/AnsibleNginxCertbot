@@ -10,6 +10,12 @@
         tags: [ ssh_on ]
       }
 
+    - { role: centos_selinux,
+        vars: {
+            centos_selinux_state: disabled  # for demo only
+        },
+        tags: selinux }
+
     - { role: centos_certbot_easydns,
         vars: {
             centos_certbot_easydns_api: "{{ easydns_api }}",
