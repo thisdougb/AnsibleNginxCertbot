@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Certbot DNS Cleanup With EasyDNS.
 
 This is a validation hook for EasyDNS, used by Certbot during certification creation.

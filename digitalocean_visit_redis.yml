@@ -1,0 +1,26 @@
+- hosts: visit_redis
+
+  roles:
+    - { role: digitalocean_firewall,
+        vars: {
+            digitalocean_firewall_name: fw-web-servers,
+            digitalocean_firewall_rule: ssh-inbound,
+            digitalocean_firewall_rule_status: enable
+        },
+        tags: [ ssh_on ]
+      }
+
+    - { role: centos_selinux,
+        vars: {
+            centos_selinux_state: disabled  # for demo only
+        },
+        tags: selinux }
+
+#    - { role: digitalocean_firewall,
+#        vars: {
+#            digitalocean_firewall_name: fw-web-servers,
+#            digitalocean_firewall_rule: ssh-inbound,
+#            digitalocean_firewall_rule_status: disable
+#        },
+#        tags: [ ssh_off ]
+#      }

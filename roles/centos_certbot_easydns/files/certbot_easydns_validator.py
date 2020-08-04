@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Certbot DNS Validation With EasyDNS.
 
 This is a validation hook for EasyDNS, used by Certbot during certification creation.
@@ -62,6 +62,6 @@ if API_RESPONSE.status_code == 201:
     exit(0)
 
 else:
-    logging.error("certbot_easydns_validator(): API_RESPONSE was %s, exiting.",
+    logging.error("certbot_easydns_validator(): [ERROR] API_RESPONSE was %s, exiting.",
                   API_RESPONSE.status_code)
     exit(1)
