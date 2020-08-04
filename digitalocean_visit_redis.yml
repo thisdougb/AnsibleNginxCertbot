@@ -3,7 +3,7 @@
   roles:
     - { role: digitalocean_firewall,
         vars: {
-            digitalocean_firewall_name: fw-web-servers,
+            digitalocean_firewall_name: fw-redis-servers,
             digitalocean_firewall_rule: ssh-inbound,
             digitalocean_firewall_rule_status: enable
         },
@@ -12,33 +12,32 @@
 
     - { role: centos_selinux,
         vars: {
-            centos_selinux_state: disabled  # for demo only
+            centos_selinux_state: disabled
         },
         tags: selinux }
 
     - { role: centos_yum_update,
         vars: {
-            yum_update_reboot: true  # for demo only
+            yum_update_reboot: false
         },
         tags: yumupdate }
 
     - { role: centos_iptables,
         vars: {
-            firewall_ruleset: visit_redis  # for demo only
+            firewall_ruleset: visit_redis
         },
         tags: iptables }
 
     - { role: centos_redis,
         vars: {
-            conf_file: visit_redis  # for demo only
+            conf_file: visit_redis
         },
         tags: redis }
 
-#    - { role: digitalocean_firewall,
-#        vars: {
-#            digitalocean_firewall_name: fw-web-servers,
-#            digitalocean_firewall_rule: ssh-inbound,
-#            digitalocean_firewall_rule_status: disable
-#        },
-#        tags: [ ssh_off ]
-#      }
+    - { role: digitalocean_firewall,
+        vars: {
+            digitalocean_firewall_name: fw-redis-servers,
+            digitalocean_firewall_rule: ssh-inbound,
+            digitalocean_firewall_rule_status: disable
+        },
+      }
