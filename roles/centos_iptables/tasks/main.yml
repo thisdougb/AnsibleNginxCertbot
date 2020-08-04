@@ -1,0 +1,22 @@
+---
+# tasks file for roles/centos_iptables
+
+- name: ensure iptables is installed
+  yum:
+      name: "{{ packages }}"
+      state: latest
+  vars:
+      packages:
+          - iptables
+          - iptables-services
+
+- name: copy iptables rules
+  copy:
+      src: "{{ firewall_ruleset }}_iptables"
+      dest: /etc/sysconfig/iptables
+
+- name: Make sure a iptables service is enabled
+  systemd:
+    state: started
+    enabled: yes
+    name: iptables

@@ -16,6 +16,18 @@
         },
         tags: selinux }
 
+    - { role: centos_yum_update,
+        vars: {
+            yum_update_reboot: true  # for demo only
+        },
+        tags: yumupdate }
+
+    - { role: centos_iptables,
+        vars: {
+            firewall_ruleset: visit_redis  # for demo only
+        },
+        tags: iptables }
+
 #    - { role: digitalocean_firewall,
 #        vars: {
 #            digitalocean_firewall_name: fw-web-servers,
