@@ -28,6 +28,12 @@
         },
         tags: iptables }
 
+    - { role: centos_redis,
+        vars: {
+            conf_file: visit_redis  # for demo only
+        },
+        tags: redis }
+
 #    - { role: digitalocean_firewall,
 #        vars: {
 #            digitalocean_firewall_name: fw-web-servers,

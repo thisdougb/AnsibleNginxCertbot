@@ -1,2 +1,21 @@
 ---
 # tasks file for roles/centos_redis
+
+- name: ensure Redis is installed
+  yum:
+      name: "{{ packages }}"
+      state: latest
+  vars:
+      packages:
+          - redis
+
+- name: install config file
+  copy:
+      src: "{{ conf_file }}.conf"
+      dest: /etc/redis.conf
+
+- name: Make sure Redis is running and enabled
+  systemd:
+    state: started
+    enabled: yes
+    name: redis
