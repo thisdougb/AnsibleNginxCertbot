@@ -40,29 +40,29 @@ http {
         server 127.0.0.1:8000;
     }
 
+    # redirect all http to https
+    server {
+        listen 80 default_server;
+        server_name _;
+        return 301 https://$host$request_uri;
+    }
+
     server {
 
         # Load configuration files for the default server block.
         include /etc/nginx/default.d/*.conf;
 
         listen              443 ssl;
-        server_name  api.cardkist.com;
-        ssl_certificate     {{ centos_nginx_webserver_cert_path }}{{ centos_nginx_webserver_name }}/fullchain.pem;
-        ssl_certificate_key {{ centos_nginx_webserver_cert_path }}{{ centos_nginx_webserver_name }}/privkey.pem;
+        server_name  {{ centos_nginx_webserver_name }};
+        ssl_certificate     /etc/letsencrypt/live/{{ centos_nginx_webserver_name }}/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/{{ centos_nginx_webserver_name }}/privkey.pem;
 
-        location /vendor/ {
+        location /v1/ {
             proxy_pass http://backend;
         }
-        location /visit/ {
-            proxy_pass http://backend;
-        }
-        location /health/ {
-            proxy_pass http://backend;
-        }
-
-        root /var/www/{{ centos_nginx_webserver_name }}/html;
 
         location / {
+            root /var/www/{{ centos_nginx_webserver_name }}/html;
         }
     }
 }

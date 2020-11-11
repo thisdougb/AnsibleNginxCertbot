@@ -1,0 +1,35 @@
+---
+# tasks file for roles/centos_postfix
+
+- name: ensure postfix is installed
+  yum:
+      name: postfix
+      state: present
+
+- name: update postfix main.cf
+  template:
+    src: main.cf.j2
+    dest: /etc/postfix/main.cf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: update postfix master.cf
+  template:
+    src: master.cf.j2
+    dest: /etc/postfix/master.cf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Include opendkim play
+  include: opendkim.yml
+
+- name: Include opendmarc play
+  include: opendmarc.yml
+
+- name: restart postfix
+  service:
+      name: postfix
+      state: restarted
+      enabled: yes

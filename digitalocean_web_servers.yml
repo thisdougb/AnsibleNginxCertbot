@@ -7,7 +7,7 @@
             digitalocean_firewall_rule: ssh-inbound,
             digitalocean_firewall_rule_status: enable
         },
-        tags: [ ssh_on ]
+        tags: [ ssh_on, always ]
       }
 
     - { role: centos_selinux,
@@ -21,12 +21,16 @@
             centos_certbot_easydns_api: "{{ easydns_api }}",
             centos_certbot_easydns_token: "{{ easydns_token }}",
             centos_certbot_easydns_key: "{{ easydns_key }}",
-            centos_certbot_easydns_domain: "{{ website_domain }}",
-            centos_certbot_easydns_email: "{{ website_domain_email }}"
+            centos_certbot_easydns_domain: idthings.io,
+            centos_certbot_easydns_email: junk@ipercolate.net
         },
         tags: certbot }
 
-    - { role: centos_nginx_webserver, tags: nginx }
+    - { role: centos_nginx_webserver,
+        vars: {
+            centos_nginx_webserver_name: "idthings.io"
+            },
+        tags: nginx }
 
     - { role: digitalocean_firewall,
         vars: {

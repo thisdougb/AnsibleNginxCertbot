@@ -69,9 +69,23 @@
   no_log: yes
   register: centos_postfix_filter_recipient_domains_result
 
+- name: block inbound smtp to specific recipient addresses
+  lineinfile:
+    path: /etc/postfix/filter_recipient_domains
+    regexp: "^{{ item }}"
+    line: "{{ item }} permit_mynetworks,reject"
+    mode: 0644
+    owner: root
+    group: root
+    create: yes
+  with_items:
+      - "no-reply@cardkist.com"
+  no_log: yes
+  register: centos_postfix_block_specific_recipients_result
+
 - name: update filter_recipient_domains db
   command: /usr/sbin/postmap hash:/etc/postfix/filter_recipient_domains
-  when: centos_postfix_filter_recipient_domains_result.changed
+  when: (centos_postfix_filter_recipient_domains_result.changed) or (centos_postfix_block_specific_recipients_result.changed)
 
 - name: Include opendkim play
   include: opendkim.yml

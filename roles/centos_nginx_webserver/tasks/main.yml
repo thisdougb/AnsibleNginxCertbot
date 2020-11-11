@@ -11,13 +11,9 @@
       name: nginx
       state: latest
 
-- name: set webroot directory path
-  set_fact:
-      centos_nginx_webserver_webroot_path: "{{ centos_nginx_webserver_root }}{{ centos_nginx_webserver_name }}/html"
-
 - name: create Nginx web root directory on the filesystem
   file:
-      path: "{{ centos_nginx_webserver_webroot_path }}"
+      path: "/var/www/{{ centos_nginx_webserver_name }}/html"
       state: directory
       owner: root
       group: nginx
@@ -35,13 +31,13 @@
 - name: deploy website holding page
   copy:
       src: holding_page.html
-      dest: "{{ centos_nginx_webserver_webroot_path}}/index.html"
+      dest: "/var/www/{{ centos_nginx_webserver_name }}/html/index.html"
       owner: root
       group: nginx
       mode: 0644
       force: no
 
-- name: Start service nginx, if not started
+- name: Restart nginx, ensure service is enabled
   service:
     name: nginx
     state: restarted
