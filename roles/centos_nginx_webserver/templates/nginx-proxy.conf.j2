@@ -36,8 +36,12 @@ http {
     # for more information.
     include /etc/nginx/conf.d/*.conf;
 
-    upstream backend {
+    upstream idengine {
         server 127.0.0.1:8000;
+    }
+
+    upstream detector {
+        server 127.0.0.1:8001;
     }
 
     # redirect all http to https
@@ -57,12 +61,20 @@ http {
         ssl_certificate     /etc/letsencrypt/live/{{ centos_nginx_webserver_name }}/fullchain.pem;
         ssl_certificate_key /etc/letsencrypt/live/{{ centos_nginx_webserver_name }}/privkey.pem;
 
-        location /v1/ {
-            proxy_pass http://backend;
+        location /detector/ {
+            proxy_pass http://detector;
         }
 
         location / {
             root /var/www/{{ centos_nginx_webserver_name }}/html;
         }
+    }
+
+    server {
+            listen              443 ssl;
+            server_name  api.{{ centos_nginx_webserver_name }};
+            location / {
+                proxy_pass http://idengine;
+            }
     }
 }
