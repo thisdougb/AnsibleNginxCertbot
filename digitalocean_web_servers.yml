@@ -32,6 +32,8 @@
             },
         tags: nginx }
 
+    # - { role: centos_docker, tags: docker }
+
     - { role: digitalocean_firewall,
         vars: {
             digitalocean_firewall_name: fw-web-servers,

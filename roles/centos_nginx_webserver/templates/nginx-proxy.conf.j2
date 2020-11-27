@@ -70,10 +70,19 @@ http {
         }
     }
 
+    limit_req_zone $binary_remote_addr zone=create_limit:10m rate=1r/s;
+    limit_req_zone $binary_remote_addr zone=default_limit:10m rate=5r/s;
     server {
             listen              443 ssl;
             server_name  api.{{ centos_nginx_webserver_name }};
+
             location / {
+                limit_req zone=default_limit;
+                proxy_pass http://idengine;
+            }
+
+            location /identities/new/ {
+                limit_req zone=create_limit;
                 proxy_pass http://idengine;
             }
     }
